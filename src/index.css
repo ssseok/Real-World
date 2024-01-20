@@ -3,5 +3,17 @@
 @tailwind utilities;
 
 .layout {
-    
+  @apply pt-14;
+}
+
+.navbar {
+  @apply fixed w-full top-0 h-14 shadow-sm bg-white;
+}
+
+.navbar_logo {
+  @apply text-[#5cb85c] text-2xl font-bold;
+}
+
+.navbar_list {
+  @apply flex gap-4;
 }
