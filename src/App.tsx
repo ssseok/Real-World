@@ -1,10 +1,10 @@
-import Layout from "./components/Layout";
-
+import Layout from './components/Layout';
+import Router from './components/Router';
 
 function App() {
   return (
     <Layout>
-      <div className="text-3xl">hi</div>
+        <Router />
     </Layout>
   );
 }
