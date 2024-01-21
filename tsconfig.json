@@ -6,13 +6,10 @@
     "module": "ESNext",
     "skipLibCheck": true,
     /* 경로 alias 설정 */
-    "baseUrl": "src",
-    "paths": {
-      "@/*": ["*"],
-      "@pages/*": ["pages/*"],
-      "@components/*": ["components/*"],
-      "@assets/*": ["assets/*"],
-    },
+    // "baseUrl": "src",
+    // "paths": {
+    //   "@/*": ["*"]
+    // },
 
     /* Bundler mode */
     "moduleResolution": "bundler",

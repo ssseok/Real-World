@@ -6,6 +6,11 @@
   @apply pt-14;
 }
 
+.page {
+  @apply container mx-auto;
+}
+
+/* navbar */
 .navbar {
   @apply fixed w-full top-0 h-14 shadow-sm bg-white;
 }
@@ -16,4 +21,17 @@
 
 .navbar_list {
   @apply flex gap-4;
+}
+
+/* footer */
+.footer {
+  @apply bg-[#f3f3f3] absolute bottom-0 w-full px-[15px] mt-12 py-4;
+}
+
+.footer_logo {
+  @apply text-[#5cb85c] font-bold;
+}
+
+.footer_text {
+  @apply text-xs ml-[10px] text-[#bbb] font-light
 }
