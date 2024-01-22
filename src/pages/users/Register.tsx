@@ -1,14 +1,52 @@
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { APIURL } from "../../utils/util";
 
 export default function RegisterPage() {
+  const [username, setUsername] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [error, setError] = useState<string>('');
+  const navigate = useNavigate();
+
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    try {
+      const response = await fetch(`${APIURL}/users`,{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username,
+          email,
+          password,
+        }),
+      });
+      const result = await response.json();
+      console.log(result);
+      navigate('/');
+    } catch (error: any) {
+      console.error('회원가입 에러:', error);
+    }
   };
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {
       target: { name, value },
     } = e;
+
+    if (name === 'username') {
+      setUsername(value);
+    }
+
+    if (name === 'email') {
+      setEmail(value);
+    }
+
+    if (name === 'password') {
+      setPassword(value);
+    }
 
     console.log(name, value);
   };
