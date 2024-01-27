@@ -23,6 +23,10 @@
   @apply flex gap-4;
 }
 
+.navbar_list-item {
+  @apply text-[#0000004D] hover:text-[#00000099];
+}
+
 /* footer */
 .footer {
   @apply bg-[#f3f3f3] absolute bottom-0 w-full px-[15px] mt-12 py-4;
@@ -33,5 +37,5 @@
 }
 
 .footer_text {
-  @apply text-xs ml-[10px] text-[#bbb] font-light
+  @apply text-xs ml-[10px] text-[#bbb] font-light;
 }
