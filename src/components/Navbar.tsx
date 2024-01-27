@@ -1,6 +1,10 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 export default function Navbar() {
+  const pathname = useLocation().pathname;
+
+  console.log(pathname);
+
   return (
     <nav className="navbar">
       <div className="page flex justify-between items-center h-full">
@@ -8,13 +12,28 @@ export default function Navbar() {
           conduit
         </Link>
         <div className="navbar_list">
-          <Link to="/" className="navbar_list-item tex">
+          <Link
+            to="/"
+            className={`${
+              pathname === '/' ? 'text-black' : ''
+            }navbar_list-item`}
+          >
             home
           </Link>
-          <Link to="/login" className="navbar_list-item">
+          <Link
+            to="/login"
+            className={`${
+              pathname === '/login' ? 'text-black' : ''
+            }navbar_list-item`}
+          >
             sign in
           </Link>
-          <Link to="/register" className="navbar_list-item">
+          <Link
+            to="/register"
+            className={`${
+              pathname === '/register' ? 'text-black' : ''
+            }navbar_list-item`}
+          >
             sign up
           </Link>
         </div>
