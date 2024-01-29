@@ -31,8 +31,10 @@ export default function LoginPage() {
     //   //   }),
     //   // });
     //   const response = await fetch(`${APIURL}users`);
+    
     //   // back 통신
     //   const result = await response.json();
+
     //   const user = result.find(
     //     (user: { email: string; password: string; }) => user.email === email && user.password === password,
     //   );
