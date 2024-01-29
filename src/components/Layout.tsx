@@ -1,19 +1,13 @@
-import Banner from "./Banner";
-import Footer from "./Footer";
-import Navbar from "./Navbar";
+import Footer from './Footer';
+import Navbar from './Navbar';
+import { Outlet } from 'react-router-dom';
 
-
-interface LayoutProps {
-  children: React.ReactNode;
-}
-
-export default function Layout({ children }: LayoutProps) {
+export default function Layout() {
   return (
     <div className="layout">
       <Navbar />
-      <Banner/>
-      {children}
-      <Footer/>
+      <Outlet />
+      <Footer />
     </div>
   );
 }
