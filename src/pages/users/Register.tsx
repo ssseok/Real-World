@@ -65,6 +65,7 @@ export default function RegisterPage() {
             id="username"
             onChange={onChange}
             placeholder="Username"
+            value={username}
           />
         </div>
         <div>
@@ -75,6 +76,7 @@ export default function RegisterPage() {
             id="email"
             onChange={onChange}
             placeholder="Email"
+            value={email}
           />
         </div>
         <div>
@@ -85,6 +87,7 @@ export default function RegisterPage() {
             id="password"
             onChange={onChange}
             placeholder="Password"
+            value={password}
           />
         </div>
         <div className="flex justify-end">

@@ -4,7 +4,7 @@ import LoginPage from '../pages/users/Login';
 import RegisterPage from '../pages/users/Register';
 import { useAuth } from '../contexts/AuthContext';
 import Layout from './Layout';
-import EditorPage from '../pages/posts/Editor';
+import EditorPage from '../pages/posts';
 
 export default function Router() {
   const { isLoggedIn } = useAuth();
