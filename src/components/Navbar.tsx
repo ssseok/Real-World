@@ -23,7 +23,7 @@ export default function Navbar() {
                 home
               </Link>
               <Link
-                to="/"
+                to="/editor"
                 className={`${
                   pathname === '/' ? 'text-black' : ''
                 }navbar_list-item`}
@@ -39,7 +39,7 @@ export default function Navbar() {
                 Settings
               </Link>
               <Link
-                to="/"
+                to={`/profile/${user?.username}`}
                 className={`${
                   pathname === '/' ? 'text-black' : ''
                 }navbar_list-item`}

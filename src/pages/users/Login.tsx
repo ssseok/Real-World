@@ -31,7 +31,7 @@ export default function LoginPage() {
     //   //   }),
     //   // });
     //   const response = await fetch(`${APIURL}users`);
-    
+
     //   // back 통신
     //   const result = await response.json();
 
@@ -93,6 +93,7 @@ export default function LoginPage() {
             id="email"
             onChange={onChange}
             placeholder="Email"
+            value={email}
           />
         </div>
         <div>
@@ -103,6 +104,7 @@ export default function LoginPage() {
             id="password"
             onChange={onChange}
             placeholder="Password"
+            value={password}
           />
         </div>
         <div className="flex justify-end">
