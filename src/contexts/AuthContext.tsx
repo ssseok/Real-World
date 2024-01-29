@@ -8,9 +8,18 @@ interface AuthContextType {
   logout: () => void;
 }
 
+// interface User {
+//   email: string;
+//   password: string;
+//   username: string;
+//   id: number;
+// }
+
+// back 통신
 interface User {
-  email: string;
-  password: string;
+  user_id: number;
+  username: string;
+  token: string;
 }
 
 interface AuthProviderProps {
@@ -32,16 +41,37 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const login = async (email: string, password: string) => {
     try {
-      const response = await fetch(`${APIURL}/users`);
+      // const response = await fetch(`${APIURL}/users`);
+
+      // back 통신
+      const response = await fetch(`${import.meta.env.VITE_URL}/user/signin`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
+
       const users = await response.json();
 
-      const matchedUser = users.find(
-        (u: { email: string; password: string }) =>
-          u.email === email && u.password === password,
-      );
+      // const matchedUser = users.find(
+      //   (u: { email: string; password: string }) =>
+      //     u.email === email && u.password === password,
+      // );
 
-      if (matchedUser) {
-        setUser(matchedUser);
+      // if (matchedUser) {
+      //   setUser(matchedUser);
+      //   setIsLoggedIn(true);
+      //   return true;
+      // }
+      // return false;
+
+      // back 통신
+      if (response.ok) {
+        setUser(users.user);
         setIsLoggedIn(true);
         return true;
       }

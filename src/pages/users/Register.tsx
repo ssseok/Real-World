@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { APIURL } from "../../utils/util";
+import { APIURL } from '../../utils/util';
 
 export default function RegisterPage() {
   const [username, setUsername] = useState<string>('');
@@ -12,7 +12,7 @@ export default function RegisterPage() {
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const response = await fetch(`${APIURL}/users`,{
+      const response = await fetch(`${import.meta.env.VITE_URL}/user/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
