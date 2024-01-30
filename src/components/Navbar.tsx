@@ -38,7 +38,7 @@ export default function Navbar() {
                 to="/settings"
                 className={cls(
                   'navbar_list-item',
-                  pathname === '/' ? '!text-black' : '',
+                  pathname === '/settings' ? '!text-black' : '',
                 )}
               >
                 Settings
