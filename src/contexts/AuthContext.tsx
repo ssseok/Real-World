@@ -1,4 +1,4 @@
-import { createContext, useState, useContext } from 'react';
+import { createContext, useState, useContext, useEffect } from 'react';
 import { APIURL } from '../utils/util';
 
 interface AuthContextType {
@@ -70,7 +70,15 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       // return false;
 
       // back 통신
-      if (response.ok) {
+      if (users?.user?.token) {
+        localStorage.setItem('authToken', users?.user?.token);
+        localStorage.setItem(
+          'userInfo',
+          JSON.stringify({
+            username: users?.user?.username,
+            id: users?.user?.user_id,
+          }),
+        );
         setUser(users.user);
         setIsLoggedIn(true);
         return true;
@@ -83,9 +91,20 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   const logout = () => {
+    localStorage.removeItem('authToken');
     setUser(null);
     setIsLoggedIn(false);
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    const userInfo = localStorage.getItem('userInfo');
+
+    if (token && userInfo) {
+      setUser(JSON.parse(userInfo));
+      setIsLoggedIn(true);
+    }
+  }, []);
 
   return (
     <AuthContext.Provider value={{ isLoggedIn, user, login, logout }}>
