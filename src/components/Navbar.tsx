@@ -1,9 +1,11 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { cls } from '../utils/util';
 
 export default function Navbar() {
   const pathname = useLocation().pathname;
-  const { isLoggedIn, user } = useAuth();
+  const { user, isLoggedIn } = useAuth();
+  const encodeStr = encodeURI(user?.username as string);
 
   return (
     <nav className="navbar">
@@ -16,33 +18,37 @@ export default function Navbar() {
             <>
               <Link
                 to="/"
-                className={`${
-                  pathname === '/' ? 'text-black' : ''
-                }navbar_list-item`}
+                className={cls(
+                  'navbar_list-item',
+                  pathname === '/' ? '!text-black' : '',
+                )}
               >
                 home
               </Link>
               <Link
                 to="/editor"
-                className={`${
-                  pathname === '/' ? 'text-black' : ''
-                }navbar_list-item`}
+                className={cls(
+                  'navbar_list-item',
+                  pathname === '/editor' ? '!text-black' : '',
+                )}
               >
                 New Article
               </Link>
               <Link
-                to="/"
-                className={`${
-                  pathname === '/' ? 'text-black' : ''
-                }navbar_list-item`}
+                to="/settings"
+                className={cls(
+                  'navbar_list-item',
+                  pathname === '/' ? '!text-black' : '',
+                )}
               >
                 Settings
               </Link>
               <Link
                 to={`/profile/${user?.username}`}
-                className={`${
-                  pathname === '/' ? 'text-black' : ''
-                }navbar_list-item`}
+                className={cls(
+                  'navbar_list-item',
+                  pathname === `/profile/${encodeStr}` ? '!text-black' : '',
+                )}
               >
                 {user?.username}
               </Link>
@@ -51,25 +57,28 @@ export default function Navbar() {
             <>
               <Link
                 to="/"
-                className={`${
-                  pathname === '/' ? 'text-black' : ''
-                }navbar_list-item`}
+                className={cls(
+                  'navbar_list-item',
+                  pathname === '/' ? '!text-black' : '',
+                )}
               >
                 home
               </Link>
               <Link
                 to="/login"
-                className={`${
-                  pathname === '/login' ? 'text-black' : ''
-                }navbar_list-item`}
+                className={cls(
+                  'navbar_list-item',
+                  pathname === '/login' ? '!text-black' : '',
+                )}
               >
                 sign in
               </Link>
               <Link
                 to="/register"
-                className={`${
-                  pathname === '/register' ? 'text-black' : ''
-                }navbar_list-item`}
+                className={cls(
+                  'navbar_list-item',
+                  pathname === '/register' ? '!text-black' : '',
+                )}
               >
                 sign up
               </Link>

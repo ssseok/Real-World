@@ -3,6 +3,8 @@ import { useAuth } from '../../contexts/AuthContext';
 
 export default function HomePage() {
   const { isLoggedIn } = useAuth();
+  console.log(isLoggedIn);
+
   return (
     <>
       {!isLoggedIn && <Banner />}
