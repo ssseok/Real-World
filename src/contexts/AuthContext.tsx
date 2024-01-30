@@ -76,7 +76,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
           'userInfo',
           JSON.stringify({
             username: users?.user?.username,
-            id: users?.user?.user_id,
+            user_id: users?.user?.user_id,
           }),
         );
         setUser(users.user);
