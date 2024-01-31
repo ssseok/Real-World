@@ -1,4 +1,4 @@
-import EditorForm from "../../components/posts/EditorForm";
+import EditorForm from "../../components/editor/EditorForm";
 
 export default function EditorPage() {
 
