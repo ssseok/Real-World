@@ -8,7 +8,7 @@ export default function HomePage() {
   return (
     <>
       {!isLoggedIn && <Banner />}
-      <div className="page">Home</div>
+      <div className="page mt-6">Home</div>
     </>
   );
 }

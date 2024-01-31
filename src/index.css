@@ -2,17 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+
+
 .layout {
-  @apply pt-14;
+  @apply min-h-screen h-full;
 }
 
 .page {
   @apply container mx-auto;
 }
 
+.content-area {
+  @apply pt-14 pb-16; /* Navbar와 Footer의 높이에 맞춰 조정 */
+}
+
 /* navbar */
 .navbar {
-  @apply fixed w-full top-0 h-14 shadow-sm bg-white;
+  @apply fixed w-full inset-0 h-14 shadow-sm bg-white;
 }
 
 .navbar_logo {
@@ -29,7 +35,7 @@
 
 /* footer */
 .footer {
-  @apply bg-[#f3f3f3] absolute bottom-0 w-full px-[15px] mt-12 py-4;
+  @apply bg-[#f3f3f3] fixed bottom-0 left-0 right-0 w-full px-[15px] mt-12 py-4;
 }
 
 .footer_logo {
