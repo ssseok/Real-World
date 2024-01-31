@@ -1,41 +1,11 @@
-import { useEffect, useState } from 'react';
-import { useAuth } from '../contexts/AuthContext';
 import { Link } from 'react-router-dom';
+import useProfileFetch from "../hooks/useProfileFetch";
 
-interface UserInfoProps {
-  username: string;
-  profile_image: string;
-}
+
 
 export default function UserInfo() {
-  const { user } = useAuth();
-  const [profile, setProfile] = useState<UserInfoProps | null>(null);
+const {profile} = useProfileFetch()
 
-  const token = localStorage.getItem('authToken');
-  const user_id = user?.user_id;
-
-  const profileFetch = async () => {
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_URL}/user/${user_id}/profile`,
-        {
-          method: 'GET',
-          headers: {
-            authorization: token as any,
-          },
-        },
-      );
-      const result = await response.json();
-      console.log(result);
-      setProfile(result.user);
-    } catch (error: any) {
-      console.error('프로필 에러', error);
-    }
-  };
-
-  useEffect(() => {
-    profileFetch();
-  }, []);
   return (
     <div className="bg-[#f3f3f3] pt-8 pb-4">
       <div className="page">
