@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import useProfileFetch from '../../hooks/useProfileFetch';
-import { useAuth } from "../../contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useAuth } from '../../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 export default function SettingsForm() {
-const {logout} = useAuth()
+  const { logout, user, updateUser } = useAuth();
   const { profile } = useProfileFetch();
   const navigate = useNavigate();
+  const token = localStorage.getItem('authToken');
 
   const [profileImage, setProfileImage] = useState<string | undefined>('');
   const [bio, setBio] = useState<string | undefined>('');
@@ -14,11 +15,69 @@ const {logout} = useAuth()
   const [email, setEmail] = useState<string | undefined>('');
   const [password, setPassword] = useState<string | undefined>('');
 
-  const onSubmit = () => {};
-  const onChange = () => {};
-  const handleLogout = async() => {
-    await logout();
-  navigate('/')
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_URL}/user/${user?.user_id}/profile`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            authorization: token as any,
+          },
+          body: JSON.stringify({
+            bio,
+            profile_image: profileImage,
+            username,
+            email,
+            password,
+          }),
+        },
+      );
+      const result = await response.json();
+      if (result && result.user) {
+        updateUser({
+          bio: result.user.bio,
+          profile_image: result.user.profile_image,
+          username: result.user.username,
+          email: result.user.email,
+          password: result.user.password,
+        });
+        navigate(`${import.meta.env.VITE_URL}/user/${user?.user_id}/profile`);
+      }
+    } catch (error: any) {
+      console.error('프로필 수정 에러', error);
+    }
+  };
+  const onChange = (
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLTextAreaElement>,
+  ) => {
+    const {
+      target: { name, value },
+    } = e;
+
+    if (name === 'profileImage') {
+      setProfileImage(value);
+    }
+    if (name === 'bio') {
+      setBio(value);
+    }
+    if (name === 'username') {
+      setUsername(value);
+    }
+    if (name === 'email') {
+      setEmail(value);
+    }
+    if (name === 'password') {
+      setPassword(value);
+    }
+  };
+  const handleLogout = () => {
+    logout();
+    navigate('/');
   };
 
   // 프로필 데이터가 로드되었을 때 입력 필드의 상태를 업데이트
@@ -104,7 +163,10 @@ const {logout} = useAuth()
         </form>
         <hr className="w-full my-4" />
         <div className="flex justify-start w-full ">
-          <button onClick={handleLogout} className="text-[#B85C5C] border-[#B85C5C] border bg-transparent text-center py-2 px-4 rounded hover:bg-[#B85C5C] hover:text-white">
+          <button
+            onClick={handleLogout}
+            className="text-[#B85C5C] border-[#B85C5C] border bg-transparent text-center py-2 px-4 rounded hover:bg-[#B85C5C] hover:text-white"
+          >
             Or click here to logout.
           </button>
         </div>
