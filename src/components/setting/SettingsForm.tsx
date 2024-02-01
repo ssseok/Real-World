@@ -9,11 +9,13 @@ export default function SettingsForm() {
   const navigate = useNavigate();
   const token = localStorage.getItem('authToken');
 
-  const [profileImage, setProfileImage] = useState<string | undefined>('');
-  const [bio, setBio] = useState<string | undefined>('');
-  const [username, setUsername] = useState<string | undefined>('');
-  const [email, setEmail] = useState<string | undefined>('');
-  const [password, setPassword] = useState<string | undefined>('');
+  const [formData, setFormData] = useState({
+    profileImage: '',
+    bio: '',
+    username: '',
+    email: '',
+    password: '',
+  });
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -26,25 +28,16 @@ export default function SettingsForm() {
             'Content-Type': 'application/json',
             authorization: token as any,
           },
-          body: JSON.stringify({
-            bio,
-            profile_image: profileImage,
-            username,
-            email,
-            password,
-          }),
+          body: JSON.stringify(formData),
         },
       );
       const result = await response.json();
-      if (result && result.user) {
-        updateUser({
-          bio: result.user.bio,
-          profile_image: result.user.profile_image,
-          username: result.user.username,
-          email: result.user.email,
-          password: result.user.password,
-        });
-        navigate(`${import.meta.env.VITE_URL}/user/${user?.user_id}/profile`);
+
+      if (response.ok) {
+        updateUser(result.user);
+        navigate(`/user/${user?.user_id}/profile`);
+      } else {
+        throw new Error(result.message);
       }
     } catch (error: any) {
       console.error('프로필 수정 에러', error);
@@ -59,21 +52,7 @@ export default function SettingsForm() {
       target: { name, value },
     } = e;
 
-    if (name === 'profileImage') {
-      setProfileImage(value);
-    }
-    if (name === 'bio') {
-      setBio(value);
-    }
-    if (name === 'username') {
-      setUsername(value);
-    }
-    if (name === 'email') {
-      setEmail(value);
-    }
-    if (name === 'password') {
-      setPassword(value);
-    }
+    setFormData({ ...formData, [name]: value });
   };
   const handleLogout = () => {
     logout();
@@ -83,10 +62,13 @@ export default function SettingsForm() {
   // 프로필 데이터가 로드되었을 때 입력 필드의 상태를 업데이트
   useEffect(() => {
     if (profile) {
-      setProfileImage(profile.profile_image);
-      setUsername(profile.username);
-      setBio(profile.bio);
-      // bio, email 등 다른 필드들도 필요하다면 이곳에서 설정
+      setFormData({
+        profileImage: profile.profile_image || '',
+        bio: profile.bio || '',
+        username: profile.username || '',
+        email: '',
+        password: '', // 비밀번호는 초기화하지 않음
+      });
     }
   }, [profile]); // profile이 변경될 때마다 이 useEffect가 실행됩니다.
 
@@ -105,7 +87,7 @@ export default function SettingsForm() {
               id="profileImage"
               onChange={onChange}
               placeholder="URL of profile picture"
-              value={profileImage}
+              value={formData?.profileImage}
             />
           </div>
           <div>
@@ -116,7 +98,7 @@ export default function SettingsForm() {
               id="username"
               onChange={onChange}
               placeholder="Your Name"
-              value={username}
+              value={formData?.username}
             />
           </div>
           <div>
@@ -127,7 +109,7 @@ export default function SettingsForm() {
               rows={8}
               onChange={onChange}
               placeholder="Short bio about you"
-              value={bio}
+              value={formData?.bio}
             />
           </div>
           <div className="">
@@ -138,7 +120,7 @@ export default function SettingsForm() {
               id="email"
               onChange={onChange}
               placeholder="Email"
-              value={email}
+              value={formData?.email}
             />
           </div>
           <div>
@@ -149,7 +131,7 @@ export default function SettingsForm() {
               id="password"
               onChange={onChange}
               placeholder="Password"
-              value={password}
+              value={formData?.password}
             />
           </div>
           <div className="flex justify-end">
