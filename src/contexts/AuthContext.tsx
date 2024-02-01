@@ -1,25 +1,12 @@
 import { createContext, useState, useContext, useEffect } from 'react';
-import { APIURL } from '../utils/util';
+import { UserInfo } from '../types/users';
 
 interface AuthContextType {
   isLoggedIn: boolean;
-  user: User | null;
+  user: UserInfo | null;
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
-}
-
-// interface User {
-//   email: string;
-//   password: string;
-//   username: string;
-//   id: number;
-// }
-
-// back 통신
-interface User {
-  user_id: number;
-  username: string;
-  token: string;
+  updateUser: (updatedUserInfo: UserInfo) => void;
 }
 
 interface AuthProviderProps {
@@ -29,21 +16,19 @@ interface AuthProviderProps {
 const AuthContext = createContext<AuthContextType>({
   isLoggedIn: false,
   user: null,
-  login: () => Promise.resolve(false),
+  login: async () => false,
   logout: () => {},
+  updateUser: () => {},
 });
 
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [user, setUser] = useState<UserInfo | null>(null);
 
   const login = async (email: string, password: string) => {
     try {
-      // const response = await fetch(`${APIURL}/users`);
-
-      // back 통신
       const response = await fetch(`${import.meta.env.VITE_URL}/user/signin`, {
         method: 'POST',
         headers: {
@@ -55,43 +40,32 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         }),
       });
 
-      const users = await response.json();
+      if (!response.ok) throw new Error(`Login failed: ${response.status}`);
 
-      // const matchedUser = users.find(
-      //   (u: { email: string; password: string }) =>
-      //     u.email === email && u.password === password,
-      // );
+      const data = await response.json();
+      const { token, ...userInfo } = data.user;
 
-      // if (matchedUser) {
-      //   setUser(matchedUser);
-      //   setIsLoggedIn(true);
-      //   return true;
-      // }
-      // return false;
+      localStorage.setItem('authToken', token);
+      localStorage.setItem('userInfo', JSON.stringify(userInfo));
 
-      // back 통신
-      if (users?.user?.token) {
-        localStorage.setItem('authToken', users?.user?.token);
-        localStorage.setItem(
-          'userInfo',
-          JSON.stringify({
-            username: users?.user?.username,
-            user_id: users?.user?.user_id,
-          }),
-        );
-        setUser(users.user);
-        setIsLoggedIn(true);
-        return true;
-      }
-      return false;
+      setUser(userInfo);
+      setIsLoggedIn(true);
+      return true;
     } catch (error) {
       console.error('로그인 에러:', error);
       return false;
     }
   };
 
+  const updateUser = (updatedUserInfo: UserInfo) => {
+    const { token, password, email, ...userInfo } = updatedUserInfo;
+    setUser((prevUser) => ({ ...prevUser, ...updatedUserInfo }));
+    localStorage.setItem('userInfo', JSON.stringify({ ...user, ...userInfo }));
+  };
+
   const logout = () => {
     localStorage.removeItem('authToken');
+    localStorage.removeItem('userInfo');
     setUser(null);
     setIsLoggedIn(false);
   };
@@ -107,7 +81,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, user, login, logout }}>
+    <AuthContext.Provider
+      value={{ isLoggedIn, user, login, logout, updateUser }}
+    >
       {children}
     </AuthContext.Provider>
   );

@@ -1,17 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-
-interface ProfileProps {
-  username: string;
-  profile_image: string;
-  bio?:string;
-  email?:string;
-  password?:string;
-}
+import { UserInfo } from '../types/users';
 
 export default function useProfileFetch() {
-  const { user } = useAuth();
-  const [profile, setProfile] = useState<ProfileProps | null>(null);
+  const { user , updateUser} = useAuth();
+  const [profile, setProfile] = useState<UserInfo | null>(null);
 
   const token = localStorage.getItem('authToken');
 
@@ -27,7 +20,8 @@ export default function useProfileFetch() {
         },
       );
       const result = await response.json();
-      setProfile(result.user);
+      setProfile(result?.user);
+      updateUser(result?.user);
     } catch (error: any) {
       console.error('프로필 에러', error);
     }
@@ -39,5 +33,5 @@ export default function useProfileFetch() {
     }
   }, [user?.user_id]);
 
-  return {profile};
+  return { profile };
 }
