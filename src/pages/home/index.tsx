@@ -1,13 +1,51 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Banner from '../../components/Banner';
 import { useAuth } from '../../contexts/AuthContext';
 import { cls } from '../../utils/util';
 
 export default function HomePage() {
-  const { isLoggedIn } = useAuth();
-  const [tabSelected, setTabSelected] = useState<'global' | 'your'>(
-    isLoggedIn ? 'your' : 'global',
-  );
+  const { isLoggedIn, user } = useAuth();
+  const token = localStorage.getItem('authToken');
+  const [tabSelected, setTabSelected] = useState<'global' | 'your'>('global');
+  const [articles, setArticles] = useState<ArticleProps[]>([]);
+
+  console.log(articles);
+
+  useEffect(() => {
+    setTabSelected(isLoggedIn ? 'your' : 'global');
+  }, [isLoggedIn]);
+
+  const fetchArticles = async (tab: 'global' | 'your') => {
+    setTabSelected(tab);
+    const endpoint = tab === 'global' ? '/articles' : ``;
+    let headers: HeadersInit = {};
+    if (token) {
+      headers['Authorization'] = `${token as any}`;
+    }
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_URL}${endpoint}`, {
+        method: 'GET',
+        headers,
+      });
+
+      if (!response.ok) {
+        throw new Error(
+          `Failed to fetch ${tab} articles: ${response.statusText}`,
+        );
+      }
+
+      const { articles } = await response.json();
+      setArticles(articles);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // Fetch global articles on component mount
+  useEffect(() => {
+    fetchArticles(tabSelected);
+  }, [tabSelected]);
 
   return (
     <>
