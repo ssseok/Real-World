@@ -5,7 +5,7 @@ type AuthorProps = {
   username: string;
 };
 
-interface ArticleProps {
+export interface ArticleProps {
   article_id: number;
   author: AuthorProps;
   body: string;

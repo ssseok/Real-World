@@ -1,10 +1,8 @@
 import { Link } from 'react-router-dom';
-import useProfileFetch from "../hooks/useProfileFetch";
-
-
+import useProfileFetch from '../hooks/useProfileFetch';
 
 export default function UserInfo() {
-const {profile} = useProfileFetch()
+  const { profile } = useProfileFetch();
 
   return (
     <div className="bg-[#f3f3f3] pt-8 pb-4">
