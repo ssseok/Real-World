@@ -16,9 +16,9 @@ const {logout} = useAuth()
 
   const onSubmit = () => {};
   const onChange = () => {};
-  const handleLogout = () => {
-    logout();
-    navigate('/')
+  const handleLogout = async() => {
+    await logout();
+  navigate('/')
   };
 
   // 프로필 데이터가 로드되었을 때 입력 필드의 상태를 업데이트

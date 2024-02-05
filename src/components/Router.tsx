@@ -4,9 +4,10 @@ import LoginPage from '../pages/users/Login';
 import RegisterPage from '../pages/users/Register';
 import { useAuth } from '../contexts/AuthContext';
 import Layout from './Layout';
-import EditorPage from '../pages/posts';
+import EditorPage from '../pages/editor';
 import ProfilePage from '../pages/profile';
-import SettingsPage from "../pages/settings";
+import SettingsPage from "../pages/setting";
+import ArticlePage from "../pages/article";
 
 export default function Router() {
   const { isLoggedIn } = useAuth();
@@ -22,6 +23,7 @@ export default function Router() {
         <Route path="editor" element={<EditorPage />} />
         <Route path="profile/:id" element={<ProfilePage />} />
         <Route path="settings" element={<SettingsPage />} />
+        <Route path="article/:id" element={<ArticlePage />} />
 
         {/* 리다이렉션 룰 */}
         <Route
