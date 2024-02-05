@@ -1,12 +1,14 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
 
 export default function RegisterForm() {
-      const [username, setUsername] = useState<string>('');
+  const [username, setUsername] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string>('');
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -22,8 +24,8 @@ export default function RegisterForm() {
           password,
         }),
       });
-      const result = await response.json();
-      console.log(result);
+      
+      login(email, password);
       navigate('/');
     } catch (error: any) {
       console.error('회원가입 에러:', error);
@@ -46,10 +48,9 @@ export default function RegisterForm() {
     if (name === 'password') {
       setPassword(value);
     }
-
   };
-    return (
- <div className="page flex flex-col items-center justify-center mt-6 px-[15px]">
+  return (
+    <div className="page flex flex-col items-center justify-center mt-6 px-[15px]">
       <h1 className="text-4xl mb-3">Sign up</h1>
       <p className="text-[#5cb85c] mb-4 hover:text-[#1E822A] hover:underline">
         <Link to="/register">Have an account?</Link>
@@ -98,6 +99,5 @@ export default function RegisterForm() {
         </div>
       </form>
     </div>
-    );
+  );
 }
-
