@@ -1,9 +1,9 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../../contexts/AuthContext";
-import { useState } from "react";
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
+import { useState } from 'react';
 
 export default function LoginForm() {
-      const [email, setEmail] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -32,9 +32,9 @@ export default function LoginForm() {
     if (name === 'password') {
       setPassword(value);
     }
-
   };
-  return     <div className="page flex flex-col items-center justify-center mt-6 px-[15px]">
+  return (
+    <div className="page flex flex-col items-center justify-center mt-6 px-[15px]">
       <h1 className="text-4xl mb-3">Sign in</h1>
       <p className="text-[#5cb85c] mb-4 hover:text-[#1E822A] hover:underline">
         <Link to="/register">Need an account?</Link>
@@ -72,4 +72,5 @@ export default function LoginForm() {
         </div>
       </form>
     </div>
+  );
 }

@@ -3,7 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { UserInfo } from '../types/users';
 
 export default function useProfileFetch() {
-  const { user , updateUser} = useAuth();
+  const { user, updateUser } = useAuth();
   const [profile, setProfile] = useState<UserInfo | null>(null);
 
   const token = localStorage.getItem('authToken');
@@ -20,6 +20,7 @@ export default function useProfileFetch() {
         },
       );
       const result = await response.json();
+
       setProfile(result?.user);
       updateUser(result?.user);
     } catch (error: any) {

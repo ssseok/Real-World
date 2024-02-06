@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
-
 .layout {
   @apply min-h-screen h-full;
 }
@@ -18,7 +16,7 @@
 
 /* navbar */
 .navbar {
-  @apply fixed w-full inset-0 h-14 shadow-sm bg-white;
+  @apply fixed w-full inset-0 h-14 shadow-sm bg-white z-50;
 }
 
 .navbar_logo {
