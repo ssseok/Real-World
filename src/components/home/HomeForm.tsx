@@ -7,21 +7,38 @@ import { ArticleProps } from '../../types/articles';
 export default function HomeForm() {
   const { isLoggedIn, user } = useAuth();
 
+  console.log(user?.user_id);
+
   const [tabSelected, setTabSelected] = useState<'global' | 'your'>('your');
   const [articles, setArticles] = useState<ArticleProps[]>([]);
 
   useEffect(() => {
-    setTabSelected(isLoggedIn ? 'your' : 'global');
-  }, [isLoggedIn]);
+    // 로그인 상태이고 user_id가 있을 때만 'your' 피드를 가져옵니다.
+    if (isLoggedIn && user?.user_id) {
+      fetchArticles(tabSelected);
+    } else if (!isLoggedIn) {
+      // 로그인하지 않은 경우에는 'global' 피드를 가져옵니다.
+      fetchArticles('global');
+    }
+    // isLoggedIn 또는 user?.user_id가 변경될 때마다 이 useEffect를 재실행합니다.
+  }, [isLoggedIn, user?.user_id, tabSelected]);
 
   const fetchArticles = async (tab: 'global' | 'your') => {
+    // 'your' 탭을 선택했지만, user_id가 정의되지 않은 경우 함수를 종료합니다.
+    if (tab === 'your' && !user?.user_id) {
+      console.error('User ID is undefined.');
+      return;
+    }
     setTabSelected(tab);
     const endpoint =
-      tab === 'global' ? '/articles' : `/user/${user?.user_id}/article/`;
+      tab === 'global' ? '/articles' : `/user/${user?.user_id}/articles`;
+    const token = localStorage.getItem('authToken');
+    const headers: HeadersInit = token ? { authorization: `${token}` } : {};
 
     try {
       const response = await fetch(`${import.meta.env.VITE_URL}${endpoint}`, {
         method: 'GET',
+        headers,
       });
 
       if (!response.ok) {
