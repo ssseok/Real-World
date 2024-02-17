@@ -25,9 +25,9 @@ export default function RegisterForm() {
           body: JSON.stringify({ email }),
         },
       );
-      const data = await response.json();
+      // const data = await response.json();
       if (!response.ok) {
-        setEmailError(data.message || '이메일이 존재합니다.');
+        setEmailError('이메일이 존재합니다.');
       } else {
         setEmailError(''); // 중복 없음
       }
@@ -47,9 +47,9 @@ export default function RegisterForm() {
           body: JSON.stringify({ username }),
         },
       );
-      const data = await response.json();
+      // const data = await response.json();
       if (!response.ok) {
-        setUsernameError(data?.error?.message || '사용자이름이 존재합니다.');
+        setUsernameError('사용자이름이 존재합니다.');
       } else {
         setUsernameError(''); // 중복 없음
       }
@@ -128,7 +128,9 @@ export default function RegisterForm() {
             value={username}
           />
         </div>
-        {usernameError && <div className="text-red-500">{usernameError}</div>}
+        {usernameError && (
+          <div className="text-red-500 mb-4">{usernameError}</div>
+        )}
         <div>
           <input
             className="px-6 py-3 text-xl w-full text-[#55595c] border rounded mb-4"
@@ -141,7 +143,7 @@ export default function RegisterForm() {
             value={email}
           />
         </div>
-        {emailError && <div className="text-red-500">{emailError}</div>}
+        {emailError && <div className="text-red-500 mb-4">{emailError}</div>}
         <div>
           <input
             className="px-6 py-3 text-xl w-full text-[#55595c] border rounded mb-4"
