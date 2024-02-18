@@ -17,25 +17,24 @@ export default function EditorForm() {
 
   const onSubmit = async () => {
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_URL}/user/${user?.user_id}/article`,
-        {
-          method: 'POST',
-          headers: {
-            authorization: token as any,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            body,
-            description,
-            tag_list: tagList,
-            title,
-          }),
+      const response = await fetch(`${import.meta.env.VITE_URL}/article`, {
+        method: 'POST',
+        headers: {
+          authorization: token as any,
+          'Content-Type': 'application/json',
         },
-      );
+        body: JSON.stringify({
+          body,
+          description,
+          tag_list: tagList,
+          title,
+        }),
+      });
       if (response.ok) {
-        const result = await response.json();
-        navigate(`/article/${result?.article?.article_id}`);
+        const { article } = await response.json();
+        navigate(`/article/${article?.article_id}`, {
+          state: article,
+        });
       }
     } catch (error: any) {
       console.error('Editor 작성 에러', error);

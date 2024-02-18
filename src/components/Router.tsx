@@ -21,7 +21,7 @@ export default function Router() {
         <Route path="login" element={<LoginPage />} />
         <Route path="register" element={<RegisterPage />} />
         <Route path="editor" element={<EditorPage />} />
-        <Route path="profile/:id" element={<ProfilePage />} />
+        <Route path="profile/:username" element={<ProfilePage />} />
         <Route path="settings" element={<SettingsPage />} />
         <Route path="article/:id" element={<ArticlePage />} />
 
