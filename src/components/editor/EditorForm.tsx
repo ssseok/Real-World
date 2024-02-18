@@ -7,6 +7,8 @@ export default function EditorForm() {
   const token = localStorage.getItem('authToken');
   const navigate = useNavigate();
 
+  console.log(user?.user_id, token);
+
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [body, setBody] = useState<string>('');
@@ -20,14 +22,14 @@ export default function EditorForm() {
         {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
             authorization: token as any,
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            title,
-            description,
             body,
+            description,
             tag_list: tagList,
+            title,
           }),
         },
       );
@@ -35,11 +37,6 @@ export default function EditorForm() {
         const result = await response.json();
         navigate(`/article/${result?.article?.article_id}`);
       }
-
-      // setTitle('');
-      // setDescription('');
-      // setBody('');
-      // setTagList([]);
     } catch (error: any) {
       console.error('Editor 작성 에러', error);
     }

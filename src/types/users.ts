@@ -7,4 +7,5 @@ export interface User {
   bio?: string;
   email?: string;
   password?: string;
+  following?:boolean;
 }
