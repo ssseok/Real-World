@@ -1,8 +1,9 @@
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import useProfileFetch from '../hooks/useProfileFetch';
 
 export default function UserProfile() {
-  const { profile } = useProfileFetch();
+  const { username } = useParams();
+  const { profile } = useProfileFetch(username);
 
   return (
     <div className="bg-[#f3f3f3] pt-8 pb-4">
