@@ -1,7 +1,8 @@
-export interface UserInfo {
+export interface User {
   user_id?: number;
   username?: string;
-  token?: string;
+  access_token?: string;
+  refresh_token?: string;
   profile_image?: string;
   bio?: string;
   email?: string;

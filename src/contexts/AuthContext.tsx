@@ -1,12 +1,12 @@
 import { createContext, useState, useContext, useEffect } from 'react';
-import { UserInfo } from '../types/users';
+import { User } from '../types/users';
 
 interface AuthContextType {
   isLoggedIn: boolean;
-  user: UserInfo | null;
+  user: User | null;
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
-  updateUser: (updatedUserInfo: UserInfo) => void;
+  updateUser: (updatedUserInfo: User) => void;
 }
 
 interface AuthProviderProps {
@@ -25,7 +25,7 @@ export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-  const [user, setUser] = useState<UserInfo | null>(null);
+  const [user, setUser] = useState<User | null>(null);
 
   const login = async (email: string, password: string) => {
     try {
@@ -43,9 +43,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       if (!response.ok) throw new Error(`Login failed: ${response.status}`);
 
       const data = await response.json();
-      const { token, ...userInfo } = data.user;
+      const { access_token, refresh_token, ...userInfo } = data.user;
 
-      localStorage.setItem('authToken', token);
+      localStorage.setItem('authToken', access_token);
+      localStorage.setItem('refreshToken', refresh_token);
       localStorage.setItem('userInfo', JSON.stringify(userInfo));
 
       setUser(userInfo);
@@ -57,27 +58,66 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   };
 
-  const updateUser = (updatedUserInfo: UserInfo) => {
-    const { token, password, email, ...userInfo } = updatedUserInfo;
+  const getRefreshToken = async () => {
+    try {
+      const refreshToken = localStorage.getItem('refreshToken');
+      if (!refreshToken) throw new Error('No refresh token available');
+
+      const response = await fetch(
+        `${import.meta.env.VITE_URL}/token-refresh`,
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `${refreshToken}`,
+          },
+        },
+      );
+
+      if (!response.ok)
+        throw new Error(`Token refresh failed: ${response.status}`);
+
+      const data = await response.json();
+      const { token } = data;
+
+      localStorage.setItem('authToken', token);
+    } catch (error) {
+      console.error('Token refresh error:', error);
+    }
+  };
+
+  const updateUser = (updatedUserInfo: User) => {
+    const { access_token, refresh_token, password, email, ...userInfo } =
+      updatedUserInfo;
     setUser((prevUser) => ({ ...prevUser, ...updatedUserInfo }));
     localStorage.setItem('userInfo', JSON.stringify({ ...user, ...userInfo }));
   };
 
   const logout = () => {
     localStorage.removeItem('authToken');
+    localStorage.removeItem('refreshToken');
     localStorage.removeItem('userInfo');
     setUser(null);
     setIsLoggedIn(false);
   };
 
   useEffect(() => {
-    const token = localStorage.getItem('authToken');
+    const authToken = localStorage.getItem('authToken');
+    const refreshToken = localStorage.getItem('refreshToken');
     const userInfo = localStorage.getItem('userInfo');
 
-    if (token && userInfo) {
+    if (authToken && userInfo && refreshToken) {
       setUser(JSON.parse(userInfo));
       setIsLoggedIn(true);
     }
+
+    const checkTokenValidity = async () => {
+      const authToken = localStorage.getItem('authToken');
+      if (!authToken) {
+        await getRefreshToken();
+      }
+    };
+
+    checkTokenValidity();
   }, []);
 
   return (
