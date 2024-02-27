@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 export default function SettingsForm() {
   const { logout, user, updateUser } = useAuth();
-  const { profile } = useProfileFetch();
+  const { profile } = useProfileFetch(user?.username);
   const navigate = useNavigate();
   const token = localStorage.getItem('authToken');
 
@@ -20,14 +20,17 @@ export default function SettingsForm() {
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const response = await fetch(`${import.meta.env.VITE_URL}/my/profile`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          authorization: token as any,
+      const response = await fetch(
+        `${import.meta.env.VITE_URL}/profile?username=${user?.username}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            authorization: token as any,
+          },
+          body: JSON.stringify(formData),
         },
-        body: JSON.stringify(formData),
-      });
+      );
       const result = await response.json();
 
       if (response.ok) {

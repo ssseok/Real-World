@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import useProfileFetch from '../hooks/useProfileFetch';
 
 interface UserInfoProps {
   username: string;

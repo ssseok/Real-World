@@ -7,10 +7,10 @@ import { ArticleProps } from '../../types/articles';
 export default function HomeForm() {
   const { isLoggedIn, user } = useAuth();
 
-  console.log(user?.user_id);
-
   const [tabSelected, setTabSelected] = useState<'global' | 'your'>('your');
   const [articles, setArticles] = useState<ArticleProps[]>([]);
+
+  console.log(articles);
 
   useEffect(() => {
     // 로그인 상태이고 user_id가 있을 때만 'your' 피드를 가져옵니다.
