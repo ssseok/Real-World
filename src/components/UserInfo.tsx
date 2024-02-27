@@ -1,30 +1,33 @@
 import { Link } from 'react-router-dom';
-import useProfileFetch from '../hooks/useProfileFetch';
 
-export default function UserInfo() {
-  const { profile } = useProfileFetch();
+interface UserInfoProps {
+  username: string;
+  profile_image: string;
+  created_at: string;
+}
 
+export default function UserInfo({
+  username,
+  profile_image,
+  created_at,
+}: UserInfoProps) {
   return (
-    <div className="bg-[#f3f3f3] pt-8 pb-4">
-      <div className="page">
-        <div className="flex flex-col justify-center items-center">
-          <div className="mb-4">
-            <img
-              className="rounded-full w-[100px] h-[100px]"
-              src={profile?.profile_image}
-              alt="profile"
-            />
-          </div>
-          <h4 className="font-bold text-2xl mb-2">{profile?.username}</h4>
-        </div>
-        <div className="flex justify-end">
-          <Link
-            to="/settings"
-            className="text-[#999] border border-[#999] py-1 px-2 text-sm rounded"
-          >
-            Edit Profile Settings
-          </Link>
-        </div>
+    <div className="flex items-center">
+      <Link to={`/profile/${username}`}>
+        <img
+          className="rounded-full h-8 w-8"
+          src={profile_image}
+          alt="profile_image"
+        />
+      </Link>
+      <div className="flex flex-col ml-[0.3rem] mr-6">
+        <Link
+          className="text-[#5CB85C] font-medium hover:text-[#3d8b3d] hover:underline"
+          to={`/profile/${username}`}
+        >
+          {username}
+        </Link>
+        <span className="text-xs text-[#bbb]">{created_at}</span>
       </div>
     </div>
   );
